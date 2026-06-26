@@ -278,16 +278,17 @@ A análise revelou uma postura de segurança gravemente comprometida, resultando
   - Suporte a múltiplos destinatários.
 
 ## 15. Prompts utilizados
+
 > Formate a documentação técnica completa para o projeto de ferramenta automatizada de diagnóstico de segurança web (SSL/TLS) desenvolvido com n8n.
-
-A documentação deve conter:
-- Capa com título, autor, plataformas e versão
-- Sumário automático com hyperlinks
-- Numeração de páginas no rodapé
-- Diagrama do fluxo de execução (fluxograma com todos os nós, decisões e o laço de polling) embutido como imagem
-- Seções: Objetivo, Visão Geral, Arquitetura, Fluxo de Execução, Tecnologias Utilizadas, Dados Coletados, Vulnerabilidades Verificadas, Saídas e Relatório, Tratamento de Erros, Segurança e Privacidade, Pré-requisitos e Configuração, Como Usar, Limitações e Trabalhos Futuros
-
-Use formatação corporativa: fonte Arial, títulos com linha azul (#0f6cbd), tabelas com cabeçalho azul.
+> 
+> A documentação deve conter:
+> - Capa com título, autor, plataformas e versão
+> - Sumário automático com hyperlinks
+> - Numeração de páginas no rodapé
+> - Diagrama do fluxo de execução (fluxograma com todos os nós, decisões e o laço de polling) embutido como imagem
+> - Seções: Objetivo, Visão Geral, Arquitetura, Fluxo de Execução, Tecnologias Utilizadas, Dados Coletados, Vulnerabilidades Verificadas, Saídas e Relatório, Tratamento de Erros, Segurança e Privacidade, Pré-requisitos e Configuração, Como Usar, Limitações e Trabalhos Futuros
+> 
+> Use formatação corporativa: fonte Arial, títulos com linha azul (#0f6cbd), tabelas com cabeçalho azul.
 
 ---
 
