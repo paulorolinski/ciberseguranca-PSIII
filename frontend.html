@@ -1,0 +1,381 @@
+const html = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnóstico de Segurança Web</title>
+    <style>
+        :root {
+            --bg-1: #f7f7f8;
+            --bg-2: #efeff1;
+            --surface: #ffffff;
+            --fg-1: #242424;
+            --fg-2: #424242;
+            --fg-3: #616161;
+            --fg-disabled: #bdbdbd;
+            --stroke-1: #d1d1d1;
+            --stroke-2: #e0e0e0;
+            --stroke-accessible: #616161;
+            --brand: #0f6cbd;
+            --brand-hover: #115ea3;
+            --brand-pressed: #0c3b5e;
+            --brand-bg2: #ebf3fc;
+            --ok-bg: #f1faf1;
+            --ok-border: #9fd89f;
+            --ok-fg: #0e5814;
+            --err-bg: #fdf3f4;
+            --err-border: #eeacb2;
+            --err-fg: #8a0b14;
+            --radius-m: 4px;
+            --radius-l: 6px;
+            --radius-xl: 8px;
+            --shadow-2: 0 0 2px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .14);
+            --shadow-28: 0 0 8px rgba(0, 0, 0, .12), 0 14px 28px rgba(0, 0, 0, .14);
+            --font: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font);
+            color: var(--fg-1);
+            background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px
+        }
+
+        .card {
+            width: 100%;
+            max-width: 468px;
+            background: var(--surface);
+            border: 1px solid rgba(0, 0, 0, .04);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-28);
+            overflow: hidden
+        }
+
+        .head {
+            padding: 24px 24px 4px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .badge {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            border-radius: var(--radius-l);
+            background: var(--brand);
+            display: grid;
+            place-items: center;
+            box-shadow: var(--shadow-2)
+        }
+
+        .badge svg {
+            width: 22px;
+            height: 22px;
+            color: #fff
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -.01em;
+            margin: 0;
+            color: var(--fg-1)
+        }
+
+        .sub {
+            color: var(--fg-3);
+            font-size: 13px;
+            margin-top: 2px;
+            line-height: 1.35
+        }
+
+        .body {
+            padding: 18px 24px 24px 24px
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 2px 0 22px 0
+        }
+
+        .chip {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--brand);
+            background: var(--brand-bg2);
+            border-radius: 999px;
+            padding: 4px 11px
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fg-1);
+            margin: 16px 0 6px 0
+        }
+
+        .field {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: var(--surface);
+            border: 1px solid var(--stroke-1);
+            border-bottom-color: var(--stroke-accessible);
+            border-radius: var(--radius-m);
+            padding: 0 11px;
+            height: 40px;
+            transition: border-color .1s ease
+        }
+
+        .field:hover {
+            border-color: #b3b3b3;
+            border-bottom-color: var(--fg-1)
+        }
+
+        .field::after {
+            content: "";
+            position: absolute;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            height: 2px;
+            background: var(--brand);
+            border-bottom-left-radius: var(--radius-m);
+            border-bottom-right-radius: var(--radius-m);
+            transform: scaleX(0);
+            transition: transform .15s cubic-bezier(.1, .9, .2, 1)
+        }
+
+        .field:focus-within {
+            border-color: var(--stroke-1);
+            border-bottom-color: var(--brand)
+        }
+
+        .field:focus-within::after {
+            transform: scaleX(1)
+        }
+
+        .field svg {
+            width: 18px;
+            height: 18px;
+            color: var(--fg-3);
+            flex: 0 0 18px
+        }
+
+        input {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--fg-1);
+            font-family: var(--font);
+            font-size: 14px
+        }
+
+        input::placeholder {
+            color: #707070
+        }
+
+        button {
+            margin-top: 24px;
+            width: 100%;
+            height: 40px;
+            border: 0;
+            border-radius: var(--radius-m);
+            font-family: var(--font);
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: var(--brand);
+            cursor: pointer;
+            transition: background .1s ease
+        }
+
+        button:hover {
+            background: var(--brand-hover)
+        }
+
+        button:active {
+            background: var(--brand-pressed)
+        }
+
+        button:disabled {
+            background: var(--brand);
+            opacity: .6;
+            cursor: not-allowed
+        }
+
+        .spinner {
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            vertical-align: -2px;
+            border: 2px solid rgba(255, 255, 255, .4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            margin-right: 8px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .msg {
+            display: none;
+            margin-top: 16px;
+            padding: 11px 13px;
+            border-radius: var(--radius-m);
+            font-size: 13px;
+            line-height: 1.45;
+            border: 1px solid transparent
+        }
+
+        .msg.show {
+            display: block
+        }
+
+        .msg.ok {
+            background: var(--ok-bg);
+            border-color: var(--ok-border);
+            color: var(--ok-fg)
+        }
+
+        .msg.err {
+            background: var(--err-bg);
+            border-color: var(--err-border);
+            color: var(--err-fg)
+        }
+
+        .msg strong {
+            font-weight: 600
+        }
+
+        .foot {
+            color: var(--fg-3);
+            font-size: 12px;
+            text-align: center;
+            margin-top: 18px;
+            line-height: 1.5
+        }
+
+        .foot strong {
+            color: var(--fg-2);
+            font-weight: 600
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="head">
+            <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                </svg></div>
+            <div>
+                <h1>Diagnóstico de Segurança Web</h1>
+                <div class="sub">Auditoria automatizada de SSL/TLS, certificados e configuração</div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="features"><span class="chip">Protocolos SSL/TLS</span><span class="chip">Certificado
+                    digital</span><span class="chip">Configurações inseguras</span><span class="chip">Classificação de
+                    risco</span></div>
+            <label for="domain">Domínio a analisar</label>
+            <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg><input id="domain" type="text" inputmode="url" autocomplete="off" placeholder="exemplo.com.br" />
+            </div>
+            <label for="email">E-mail para receber o relatório</label>
+            <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg><input id="email" type="email" autocomplete="email" placeholder="voce@email.com" /></div>
+            <button id="submit">Iniciar diagnóstico</button>
+            <div id="msg" class="msg"></div>
+            <div class="foot">A análise roda em <strong>segundo plano</strong> e o relatório chega por
+                <strong>e-mail</strong> em alguns minutos.</div>
+        </div>
+    </div>
+    <script>
+        const WEBHOOK_URL_OVERRIDE = "";
+        function resolveWebhookUrl() {
+            if (WEBHOOK_URL_OVERRIDE) return WEBHOOK_URL_OVERRIDE;
+            const u = new URL(window.location.href);
+            u.search = ""; u.hash = "";
+            const path = u.pathname; const idx = path.lastIndexOf("/");
+            u.pathname = path.slice(0, idx + 1) + "diagnostico-run";
+            return u.toString();
+        }
+        const dEl = document.getElementById("domain");
+        const eEl = document.getElementById("email");
+        const btn = document.getElementById("submit");
+        const msg = document.getElementById("msg");
+        function showMsg(type, html) { msg.className = "msg show " + type; msg.innerHTML = html; }
+        function hideMsg() { msg.className = "msg"; }
+        function cleanDomain(value) {
+            let v = value.trim().toLowerCase();
+            v = v.split(" ").join("");
+            if (v.indexOf("https://") === 0) v = v.slice(8);
+            if (v.indexOf("http://") === 0) v = v.slice(7);
+            const slash = v.indexOf("/"); if (slash >= 0) v = v.slice(0, slash);
+            return v;
+        }
+        function isValidDomain(d) { if (d.indexOf(" ") !== -1) return false; const dot = d.indexOf("."); return dot > 0 && dot < d.length - 1; }
+        function isValidEmail(e) { const at = e.indexOf("@"); if (at <= 0) return false; const dot = e.indexOf(".", at); return dot > at + 1 && dot < e.length - 1; }
+        async function submitForm() {
+            hideMsg();
+            const domain = cleanDomain(dEl.value);
+            const email = eEl.value.trim();
+            if (!isValidDomain(domain)) { showMsg("err", "Informe um domínio válido, como <strong>exemplo.com.br</strong> (sem http e sem caminhos)."); dEl.focus(); return; }
+            if (!isValidEmail(email)) { showMsg("err", "Informe um e-mail válido para receber o relatório."); eEl.focus(); return; }
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Enviando para análise...';
+            try {
+                const res = await fetch(resolveWebhookUrl(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ domain: domain, email: email }) });
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                showMsg("ok", "Diagnóstico iniciado para <strong>" + domain + "</strong>.<br>O relatório será enviado para <strong>" + email + "</strong> assim que a análise terminar (geralmente 1 a 3 min).");
+                dEl.value = ""; eEl.value = "";
+            } catch (err) {
+                showMsg("err", "Não foi possível iniciar a análise. Verifique se o workflow está <strong>ativo</strong> no n8n e tente novamente.");
+            } finally {
+                btn.disabled = false; btn.textContent = "Iniciar diagnóstico";
+            }
+        }
+        btn.addEventListener("click", submitForm);
+        [dEl, eEl].forEach(function (el) { el.addEventListener("keydown", function (e) { if (e.key === "Enter") submitForm(); }); });
+    </script>
+</body>
+
+</html>`;
+return [{ json: { html: html } }];

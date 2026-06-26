@@ -1,0 +1,653 @@
+{
+  "name": "Diagnóstico de Segurança Web (SSL/TLS)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "diagnostico",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "abb258a9-3d7e-40a3-be8c-140085853f68",
+      "name": "Página - Formulário",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        144
+      ],
+      "webhookId": "4bff44b6-7afa-488a-a9b1-ad01a978200a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n<title>Diagnóstico de Segurança Web</title>\n<style>\n:root{\n  --bg-1:#f7f7f8;--bg-2:#efeff1;\n  --surface:#ffffff;\n  --fg-1:#242424;--fg-2:#424242;--fg-3:#616161;--fg-disabled:#bdbdbd;\n  --stroke-1:#d1d1d1;--stroke-2:#e0e0e0;--stroke-accessible:#616161;\n  --brand:#0f6cbd;--brand-hover:#115ea3;--brand-pressed:#0c3b5e;--brand-bg2:#ebf3fc;\n  --ok-bg:#f1faf1;--ok-border:#9fd89f;--ok-fg:#0e5814;\n  --err-bg:#fdf3f4;--err-border:#eeacb2;--err-fg:#8a0b14;\n  --radius-m:4px;--radius-l:6px;--radius-xl:8px;\n  --shadow-2:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14);\n  --shadow-28:0 0 8px rgba(0,0,0,.12),0 14px 28px rgba(0,0,0,.14);\n  --font:\"Segoe UI Variable Text\",\"Segoe UI Variable\",\"Segoe UI\",system-ui,-apple-system,Roboto,Arial,sans-serif;\n}\n*{box-sizing:border-box}\nhtml,body{height:100%}\nbody{margin:0;font-family:var(--font);color:var(--fg-1);background:linear-gradient(180deg,var(--bg-1),var(--bg-2));display:flex;align-items:center;justify-content:center;padding:24px}\n.card{width:100%;max-width:468px;background:var(--surface);border:1px solid rgba(0,0,0,.04);border-radius:var(--radius-xl);box-shadow:var(--shadow-28);overflow:hidden}\n.head{padding:24px 24px 4px 24px;display:flex;gap:12px;align-items:center}\n.badge{width:40px;height:40px;flex:0 0 40px;border-radius:var(--radius-l);background:var(--brand);display:grid;place-items:center;box-shadow:var(--shadow-2)}\n.badge svg{width:22px;height:22px;color:#fff}\nh1{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0;color:var(--fg-1)}\n.sub{color:var(--fg-3);font-size:13px;margin-top:2px;line-height:1.35}\n.body{padding:18px 24px 24px 24px}\n.features{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 22px 0}\n.chip{font-size:12px;font-weight:500;color:var(--brand);background:var(--brand-bg2);border-radius:999px;padding:4px 11px}\nlabel{display:block;font-size:13px;font-weight:600;color:var(--fg-1);margin:16px 0 6px 0}\n.field{position:relative;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--stroke-1);border-bottom-color:var(--stroke-accessible);border-radius:var(--radius-m);padding:0 11px;height:40px;transition:border-color .1s ease}\n.field:hover{border-color:#b3b3b3;border-bottom-color:var(--fg-1)}\n.field::after{content:\"\";position:absolute;left:-1px;right:-1px;bottom:-1px;height:2px;background:var(--brand);border-bottom-left-radius:var(--radius-m);border-bottom-right-radius:var(--radius-m);transform:scaleX(0);transition:transform .15s cubic-bezier(.1,.9,.2,1)}\n.field:focus-within{border-color:var(--stroke-1);border-bottom-color:var(--brand)}\n.field:focus-within::after{transform:scaleX(1)}\n.field svg{width:18px;height:18px;color:var(--fg-3);flex:0 0 18px}\ninput{width:100%;height:100%;border:0;outline:0;background:transparent;color:var(--fg-1);font-family:var(--font);font-size:14px}\ninput::placeholder{color:#707070}\nbutton{margin-top:24px;width:100%;height:40px;border:0;border-radius:var(--radius-m);font-family:var(--font);font-size:14px;font-weight:600;color:#fff;background:var(--brand);cursor:pointer;transition:background .1s ease}\nbutton:hover{background:var(--brand-hover)}\nbutton:active{background:var(--brand-pressed)}\nbutton:disabled{background:var(--brand);opacity:.6;cursor:not-allowed}\n.spinner{width:15px;height:15px;display:inline-block;vertical-align:-2px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px}\n@keyframes spin{to{transform:rotate(360deg)}}\n.msg{display:none;margin-top:16px;padding:11px 13px;border-radius:var(--radius-m);font-size:13px;line-height:1.45;border:1px solid transparent}\n.msg.show{display:block}\n.msg.ok{background:var(--ok-bg);border-color:var(--ok-border);color:var(--ok-fg)}\n.msg.err{background:var(--err-bg);border-color:var(--err-border);color:var(--err-fg)}\n.msg strong{font-weight:600}\n.foot{color:var(--fg-3);font-size:12px;text-align:center;margin-top:18px;line-height:1.5}\n.foot strong{color:var(--fg-2);font-weight:600}\n</style>\n</head>\n<body>\n<div class=\"card\">\n<div class=\"head\">\n<div class=\"badge\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/><path d=\"m9 12 2 2 4-4\"/></svg></div>\n<div><h1>Diagnóstico de Segurança Web</h1><div class=\"sub\">Auditoria automatizada de SSL/TLS, certificados e configuração</div></div>\n</div>\n<div class=\"body\">\n<div class=\"features\"><span class=\"chip\">Protocolos SSL/TLS</span><span class=\"chip\">Certificado digital</span><span class=\"chip\">Configurações inseguras</span><span class=\"chip\">Classificação de risco</span></div>\n<label for=\"domain\">Domínio a analisar</label>\n<div class=\"field\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M2 12h20\"/><path d=\"M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z\"/></svg><input id=\"domain\" type=\"text\" inputmode=\"url\" autocomplete=\"off\" placeholder=\"exemplo.com.br\" /></div>\n<label for=\"email\">E-mail para receber o relatório</label>\n<div class=\"field\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg><input id=\"email\" type=\"email\" autocomplete=\"email\" placeholder=\"voce@email.com\" /></div>\n<button id=\"submit\">Iniciar diagnóstico</button>\n<div id=\"msg\" class=\"msg\"></div>\n<div class=\"foot\">A análise roda em <strong>segundo plano</strong> e o relatório chega por <strong>e-mail</strong> em alguns minutos.</div>\n</div>\n</div>\n<script>\nconst WEBHOOK_URL_OVERRIDE = \"\";\nfunction resolveWebhookUrl(){\n  if(WEBHOOK_URL_OVERRIDE) return WEBHOOK_URL_OVERRIDE;\n  const u = new URL(window.location.href);\n  u.search = \"\"; u.hash = \"\";\n  const path = u.pathname; const idx = path.lastIndexOf(\"/\");\n  u.pathname = path.slice(0, idx + 1) + \"diagnostico-run\";\n  return u.toString();\n}\nconst dEl = document.getElementById(\"domain\");\nconst eEl = document.getElementById(\"email\");\nconst btn = document.getElementById(\"submit\");\nconst msg = document.getElementById(\"msg\");\nfunction showMsg(type, html){ msg.className = \"msg show \" + type; msg.innerHTML = html; }\nfunction hideMsg(){ msg.className = \"msg\"; }\nfunction cleanDomain(value){\n  let v = value.trim().toLowerCase();\n  v = v.split(\" \").join(\"\");\n  if(v.indexOf(\"https://\") === 0) v = v.slice(8);\n  if(v.indexOf(\"http://\") === 0) v = v.slice(7);\n  const slash = v.indexOf(\"/\"); if(slash >= 0) v = v.slice(0, slash);\n  return v;\n}\nfunction isValidDomain(d){ if(d.indexOf(\" \") !== -1) return false; const dot = d.indexOf(\".\"); return dot > 0 && dot < d.length - 1; }\nfunction isValidEmail(e){ const at = e.indexOf(\"@\"); if(at <= 0) return false; const dot = e.indexOf(\".\", at); return dot > at + 1 && dot < e.length - 1; }\nasync function submitForm(){\n  hideMsg();\n  const domain = cleanDomain(dEl.value);\n  const email = eEl.value.trim();\n  if(!isValidDomain(domain)){ showMsg(\"err\", \"Informe um domínio válido, como <strong>exemplo.com.br</strong> (sem http e sem caminhos).\"); dEl.focus(); return; }\n  if(!isValidEmail(email)){ showMsg(\"err\", \"Informe um e-mail válido para receber o relatório.\"); eEl.focus(); return; }\n  btn.disabled = true;\n  btn.innerHTML = '<span class=\"spinner\"></span>Enviando para análise...';\n  try{\n    const res = await fetch(resolveWebhookUrl(), { method:\"POST\", headers:{ \"Content-Type\":\"application/json\" }, body: JSON.stringify({ domain: domain, email: email }) });\n    if(!res.ok) throw new Error(\"HTTP \" + res.status);\n    showMsg(\"ok\", \"Diagnóstico iniciado para <strong>\" + domain + \"</strong>.<br>O relatório será enviado para <strong>\" + email + \"</strong> assim que a análise terminar (geralmente 1 a 3 min).\");\n    dEl.value = \"\"; eEl.value = \"\";\n  }catch(err){\n    showMsg(\"err\", \"Não foi possível iniciar a análise. Verifique se o workflow está <strong>ativo</strong> no n8n e tente novamente.\");\n  }finally{\n    btn.disabled = false; btn.textContent = \"Iniciar diagnóstico\";\n  }\n}\nbtn.addEventListener(\"click\", submitForm);\n[dEl, eEl].forEach(function(el){ el.addEventListener(\"keydown\", function(e){ if(e.key === \"Enter\") submitForm(); }); });\n</script>\n</body>\n</html>`;\nreturn [{ json: { html: html } }];"
+      },
+      "id": "791ad279-a3f5-4916-9b60-1ca9a57be94a",
+      "name": "Servir Página HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "334bd4a3-1d4c-4447-aa3c-f9e1e4f8a880",
+      "name": "Responder HTML",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "diagnostico-run",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "1841e807-13b4-4fb4-aa67-8b87cbc7949b",
+      "name": "Receber Diagnóstico",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        368
+      ],
+      "webhookId": "deff632e-48a1-4c97-9030-5ae85fdaf6fa"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f-domain",
+              "name": "domain",
+              "value": "={{ ($json.body?.domain ?? $json.domain ?? '').toString().trim().toLowerCase().replace('https://','').replace('http://','').split('/')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "f-email",
+              "name": "email",
+              "value": "={{ ($json.body?.email ?? $json.email ?? '').toString().trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a6e5c2a-8f9b-40fb-bb93-7870bfeb08ab",
+      "name": "Normalizar Entrada",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"ok\": true, \"message\": \"Diagnóstico iniciado. O relatório será enviado por e-mail em alguns minutos.\" }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "57c99300-6056-47f4-83d7-084739ed9e9e",
+      "name": "Confirmar Recebimento",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.ssllabs.com/api/v3/analyze?host={{ $('Normalizar Entrada').item.json.domain }}&startNew=on&all=done&ignoreMismatch=on",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "f9818f7c-6c98-4f57-8a2f-09e6ba4bd95a",
+      "name": "Iniciar Scan SSL Labs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        880,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "d6e80999-cf04-4fdb-93f6-3e9ef634f235",
+      "name": "Aguardar Início",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        368
+      ],
+      "webhookId": "9416c5aa-c680-472f-a4c3-d95d8392533d"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.ssllabs.com/api/v3/analyze?host={{ $('Normalizar Entrada').item.json.domain }}&all=done&ignoreMismatch=on",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "0923505e-e1e6-4d69-a066-a5dbd9893d27",
+      "name": "Consultar Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1328,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-ready",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "READY",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "29e66718-43a1-465b-80e6-14960438cb82",
+      "name": "Análise Pronta?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1552,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst r = $input.first().json;\nconst ep = (r.endpoints && r.endpoints[0]) ? r.endpoints[0] : {};\nconst d = ep.details ? ep.details : {};\nconst cert = (r.certs && r.certs[0]) ? r.certs[0] : {};\nconst now = Date.now();\nconst notAfter = (typeof cert.notAfter === \"number\") ? cert.notAfter : null;\nconst notBefore = (typeof cert.notBefore === \"number\") ? cert.notBefore : null;\nconst daysToExpiry = notAfter ? Math.round((notAfter - now) / 86400000) : null;\nconst protocols = (d.protocols || []).map(function(p){ return (p.name || \"\") + \" \" + (p.version || \"\"); });\nconst obsoleteProtocols = [];\n(d.protocols || []).forEach(function(p){\n  const label = (p.name || \"\") + \" \" + (p.version || \"\");\n  if (p.name === \"SSL\") obsoleteProtocols.push(label);\n  if (p.name === \"TLS\" && (p.version === \"1.0\" || p.version === \"1.1\")) obsoleteProtocols.push(label);\n});\nconst hasTls13 = (d.protocols || []).some(function(p){ return p.name === \"TLS\" && p.version === \"1.3\"; });\nconst fs = d.forwardSecrecy;\nconst forwardSecrecy = (typeof fs === \"number\") ? (fs >= 4 ? \"Robusto\" : (fs > 0 ? \"Parcial\" : \"Ausente\")) : \"Desconhecido\";\nconst vulnerabilities = {\n  heartbleed: d.heartbleed === true,\n  poodleSsl: d.poodle === true,\n  poodleTls: (typeof d.poodleTls === \"number\") && d.poodleTls > 1,\n  freak: d.freak === true,\n  logjam: d.logjam === true,\n  drown: d.drownVulnerable === true,\n  beast: d.vulnBeast === true,\n  rc4: d.supportsRc4 === true,\n  openSslCcs: (typeof d.openSslCcs === \"number\") && d.openSslCcs > 1,\n  ticketbleed: (typeof d.ticketbleed === \"number\") && d.ticketbleed > 1,\n  bleichenbacher: (typeof d.bleichenbacher === \"number\") && d.bleichenbacher > 1\n};\nfunction isoDay(ms){ return ms ? new Date(ms).toISOString().slice(0,10) : null; }\nconst out = {\n  host: r.host || ep.serverName || null,\n  ipAddress: ep.ipAddress || null,\n  grade: ep.grade || ep.gradeTrustIgnored || \"Indisponível\",\n  statusMessage: ep.statusMessage || r.status || null,\n  protocols: protocols,\n  obsoleteProtocols: obsoleteProtocols,\n  hasTls13: hasTls13,\n  forwardSecrecy: forwardSecrecy,\n  supportsRc4: d.supportsRc4 === true,\n  vulnerabilities: vulnerabilities,\n  certificate: {\n    commonNames: cert.commonNames || null,\n    issuer: cert.issuerSubject || null,\n    validFrom: isoDay(notBefore),\n    validTo: isoDay(notAfter),\n    daysToExpiry: daysToExpiry,\n    expired: (daysToExpiry !== null) ? daysToExpiry < 0 : null,\n    keyAlg: cert.keyAlg || null,\n    keySize: cert.keySize || null,\n    sigAlg: cert.sigAlg || null\n  },\n  analyzedAt: new Date().toISOString()\n};\nreturn [{ json: out }];\n"
+      },
+      "id": "6ba253a0-dfd4-42ee-8348-516fbcab2242",
+      "name": "Extrair Dados SSL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analise os dados de SSL/TLS abaixo (resultado do Qualys SSL Labs) e gere o relatório em HTML conforme as regras do sistema.\n\nDADOS (JSON):\n{{ JSON.stringify($('Extrair Dados SSL').item.json, null, 2) }}",
+        "options": {
+          "systemMessage": "Você é um analista sênior de segurança em uma empresa de tecnologia. Você recebe os resultados técnicos de uma análise SSL/TLS do Qualys SSL Labs sobre um domínio e produz um RELATÓRIO em HTML, em português do Brasil, com aparência e tom de um relatório corporativo profissional (estilo de empresas de tecnologia e segurança), pronto para ser enviado por e-mail.\n\nTOM DA ESCRITA:\n- Profissional, consultivo e objetivo. Frases completas e claras, em linguagem de negócios — nem robótico ou telegráfico, nem informal.\n- Confiante e preciso. Sem exageros, sem alarmismo e sem excesso de pontos de exclamação.\n- Escreva como um especialista explicando para um cliente técnico: contextualize o risco e o impacto, não apenas liste indicadores.\n\nREGRAS TÉCNICAS DE SAÍDA (obrigatórias):\n- Responda APENAS com HTML. Sem markdown, sem cercas de código (crases triplas), sem comentários fora do HTML.\n- Use SOMENTE estilos inline (atributo style). Não use as tags html, head, body, style ou script. Comece direto por uma div container.\n- NÃO use emojis em lugar nenhum (nem em títulos, nem em listas). Use tipografia limpa no lugar de ícones.\n- Baseie-se ESTRITAMENTE nos dados fornecidos. NUNCA invente endereços IP, faixas de rede, versões, números de CVE, cifras específicas ou qualquer valor técnico que não esteja nos dados. Se um campo estiver ausente ou desconhecido, escreva 'não informado' ou omita — nunca fabrique.\n\nIDENTIDADE VISUAL (siga com consistência):\n- Envolva tudo num wrapper com fundo #f4f5f7 e padding de cerca de 24px. Dentro dele, um container centralizado de largura máxima 600px, fundo branco, cantos arredondados de 8px e uma borda sutil #e5e8ec.\n- Tipografia: família Helvetica Neue, Arial, Segoe UI, sans-serif. Corpo 14px na cor #20242b; texto secundário 13px na cor #5a6472; altura de linha aproximadamente 1.5.\n- Paleta: neutros (#20242b e #5a6472 para texto, #e5e8ec para linhas) com UM azul de marca (#0f6cbd) como cor de destaque. Use cores semânticas apenas nos selos de severidade.\n- CABEÇALHO: uma faixa superior no azul de marca (#0f6cbd) ocupando toda a largura do card, com o título em branco (por exemplo 'Relatório de Segurança SSL/TLS') e, abaixo, em tamanho menor e cor mais clara (#cfe4fb), o domínio analisado. Sóbrio e elegante.\n- PAINEL DE NOTA (logo abaixo do cabeçalho): um bloco destacando a nota do SSL Labs em fonte grande (cerca de 30px, peso forte) dentro de uma caixa de cantos arredondados. Colorize a nota: verde (#0e700e) para A e A+, âmbar (#8a6d00) para B e C, vermelho (#a4262c) para D, E, F, T e M. Ao lado, mostre o IP e a data da análise em texto secundário. Se a nota não estiver disponível, deixe claro de forma neutra.\n- TÍTULOS DE SEÇÃO: sem emojis e sem ícones. Use um título de cerca de 15px, peso 600, cor #20242b, precedido por uma pequena etiqueta em maiúsculas ou acompanhado de uma linha divisória fina (1px #e5e8ec) acima. Separe as seções com cerca de 24px.\n- SEVERIDADE: represente com selos pequenos e discretos — texto de cerca de 11px em maiúsculas, peso 600, cantos arredondados e padding interno confortável (cerca de 3px por 8px). IMPORTANTE: dê respiro ao selo. Coloque-o em sua PRÓPRIA LINHA (display block ou em uma div separada), logo acima do nome da vulnerabilidade, com margem inferior de cerca de 8px — NUNCA cole o selo no título nem no texto, e não deixe o texto encostar nele. Cores: Crítico (fundo #fde7e9, texto #a4262c), Alto (fundo #fdeee6, texto #c4320a), Médio (fundo #fff4ce, texto #8a6d00), Baixo (fundo #eaf2fb, texto #0f6cbd) e Conforme (fundo #eef7ee, texto #0e700e). Nada de blocos grandes coloridos nem de ícones de alerta.\n- TABELAS (por exemplo, o certificado): duas colunas, rótulo à esquerda em #5a6472 (13px) e valor à direita em #20242b (14px), com separadores de linha finos (#eef0f3) e bom espaçamento. Sem bordas pesadas.\n- RECOMENDAÇÕES: lista numerada e priorizada; cada item com um título curto em negrito e uma frase de explicação, separados por algum espaço. Acionável e enxuta.\n- RODAPÉ: uma linha divisória fina e, abaixo, um texto pequeno (12px, #8a94a3) com um aviso neutro — por exemplo, que o relatório foi gerado automaticamente e reflete o estado do servidor no momento da análise.\n\nCONTEÚDO (nesta ordem):\n1. Cabeçalho e painel de nota (domínio, nota, IP, data).\n2. Resumo executivo: 2 a 4 frases descrevendo a postura geral de segurança em linguagem corporativa.\n3. Vulnerabilidades e configurações inseguras: apresente cada item como um BLOCO separado, com margem inferior de cerca de 18px entre um item e o próximo. Em cada bloco, nesta ordem vertical: primeiro o selo de severidade em sua própria linha; abaixo dele, o nome da vulnerabilidade em negrito (cor #20242b); e, abaixo, a explicação objetiva do risco e do impacto em linha própria (texto secundário #5a6472, com margem superior de cerca de 4px e boa altura de linha). Garanta sempre espaço visível entre o selo e o nome, e entre o nome e a descrição. Considere protocolos obsoletos (SSLv3, TLS 1.0 e 1.1), RC4, Heartbleed, POODLE, FREAK, Logjam, DROWN, BEAST, ausência de forward secrecy, certificado expirado ou com chave fraca, assinatura SHA-1, entre outros. Itens não detectados nos dados podem ser resumidos em uma única linha de conformidade, sem inventar.\n4. Certificado digital em formato de tabela: titular (Common Name), emissor, validade e dias restantes, algoritmo e tamanho da chave, algoritmo de assinatura.\n5. Classificação de risco geral: um nível único (Crítico, Alto, Médio ou Baixo) com justificativa curta fundamentada nos dados.\n6. Recomendações de correção priorizadas.\n\nSe a nota for boa (A ou A+) e nada relevante for encontrado, deixe isso claro de forma profissional e, ainda assim, ofereça melhorias incrementais pertinentes.",
+          "maxIterations": 3
+        }
+      },
+      "id": "034c40f7-a126-4a7c-b236-82e0dcf790aa",
+      "name": "Agente de Segurança (IA)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1920,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-6",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 8192,
+          "temperature": 0.3
+        }
+      },
+      "id": "1ffe0922-27c6-445b-b261-c1f1d10e0dbf",
+      "name": "Claude (Anthropic)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.5,
+      "position": [
+        1920,
+        384
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "qmiiGXovBznhJFM0",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst raw = $input.first().json.output || \"\";\nconst data = $(\"Extrair Dados SSL\").first().json;\nconst fence = String.fromCharCode(96).repeat(3);\nlet html = String(raw);\nhtml = html.split(fence + \"html\").join(\"\");\nhtml = html.split(fence + \"HTML\").join(\"\");\nhtml = html.split(fence).join(\"\");\nhtml = html.trim();\nconst grade = (data && data.grade) ? data.grade : \"Indisponível\";\nconst host = (data && data.host) ? data.host : \"domínio\";\nconst subject = \"Diagnóstico de Segurança - \" + host + \" (Nota \" + grade + \")\";\nreturn [{ json: { emailHtml: html, subject: subject, host: host, grade: grade } }];\n"
+      },
+      "id": "ce8a4185-8746-4cd0-9f27-8e48710f0891",
+      "name": "Preparar E-mail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Normalizar Entrada').item.json.email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailHtml }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "04c771e8-eab2-40c8-82e2-6fdad6583f5a",
+      "name": "Enviar Relatório",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2432,
+        224
+      ],
+      "webhookId": "ad384603-0983-4378-a09f-5bad53cbc932",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ec7AbwXw4hDcEaze",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-error",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "ERROR",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "645b1884-df0b-4486-89f2-f425991e8991",
+      "name": "Erro na Análise?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst data = $(\"Consultar Status\").first().json;\nconst host = ($(\"Normalizar Entrada\").first().json.domain) || \"domínio\";\nconst statusMsg = (data && (data.statusMessage || data.status)) ? (data.statusMessage || data.status) : \"Erro desconhecido\";\nconst html = '<div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#fff;border:1px solid #eee;border-radius:8px;color:#333;\">'\n + '<h2 style=\"color:#b91c1c;margin-top:0;\">Não foi possível concluir o diagnóstico</h2>'\n + '<p>Tentamos analisar <strong>' + host + '</strong>, mas o Qualys SSL Labs retornou um erro:</p>'\n + '<p style=\"background:#fef2f2;border:1px solid #fecaca;padding:10px;border-radius:6px;color:#991b1b;\">' + statusMsg + '</p>'\n + '<p>Isso costuma acontecer quando o domínio não existe, não responde na porta 443 (HTTPS) ou está temporariamente indisponível. Verifique o endereço e tente novamente.</p>'\n + '<hr style=\"border:none;border-top:1px solid #eee;margin:20px 0;\">'\n + '<p style=\"font-size:12px;color:#999;\">Ferramenta automatizada de diagnóstico de segurança.</p>'\n + '</div>';\nconst subject = \"Diagnóstico de Segurança - falha ao analisar \" + host;\nreturn [{ json: { emailHtml: html, subject: subject } }];\n"
+      },
+      "id": "ad50d433-f3d9-49de-9bbc-327fa46e094b",
+      "name": "Preparar E-mail de Erro",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Normalizar Entrada').item.json.email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailHtml }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "7b350b0f-1e1c-40f6-b9fe-a2867fb69423",
+      "name": "Enviar Aviso de Erro",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2368,
+        464
+      ],
+      "webhookId": "f1f209eb-1d07-4041-9531-2318ed1a616f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ec7AbwXw4hDcEaze",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "id": "8fa0ae97-6440-4bda-9583-cd52788c6c43",
+      "name": "Aguardar e Repetir",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1760,
+        672
+      ],
+      "webhookId": "a6b63ca6-2004-435b-a74c-bc45d0546579"
+    },
+    {
+      "parameters": {
+        "content": "## Abra no navegador\nDepois de ATIVAR o workflow, acesse a URL de produção do nó \"Página - Formulário\" (algo como .../webhook/diagnostico) para usar o formulário.",
+        "height": 184,
+        "width": 740,
+        "color": 4
+      },
+      "id": "94b0e3f5-5be4-4826-a9e8-ce80fa55a831",
+      "name": "Sticky Note edad5be5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Conecte a Anthropic\nCrie/selecione a credencial da API da Anthropic no nó do modelo Claude.",
+        "height": 172,
+        "width": 300,
+        "color": 5
+      },
+      "id": "867d5487-0b3c-4189-b458-d485db00774e",
+      "name": "Sticky Note f262d488",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        976,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Conecte o Gmail\nLigue sua conta Gmail (OAuth) nestes dois nós de envio.",
+        "height": 204,
+        "width": 472,
+        "color": 3
+      },
+      "id": "0a88d9f3-dede-4faf-9778-c2f6f0b325bf",
+      "name": "Sticky Note c7237279",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -320
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Página - Formulário": {
+      "main": [
+        [
+          {
+            "node": "Servir Página HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servir Página HTML": {
+      "main": [
+        [
+          {
+            "node": "Responder HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receber Diagnóstico": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Entrada": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Recebimento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmar Recebimento": {
+      "main": [
+        [
+          {
+            "node": "Iniciar Scan SSL Labs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Iniciar Scan SSL Labs": {
+      "main": [
+        [
+          {
+            "node": "Aguardar Início",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar Início": {
+      "main": [
+        [
+          {
+            "node": "Consultar Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Status": {
+      "main": [
+        [
+          {
+            "node": "Análise Pronta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Análise Pronta?": {
+      "main": [
+        [
+          {
+            "node": "Extrair Dados SSL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro na Análise?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Dados SSL": {
+      "main": [
+        [
+          {
+            "node": "Agente de Segurança (IA)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente de Segurança (IA)": {
+      "main": [
+        [
+          {
+            "node": "Preparar E-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude (Anthropic)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de Segurança (IA)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar E-mail": {
+      "main": [
+        [
+          {
+            "node": "Enviar Relatório",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erro na Análise?": {
+      "main": [
+        [
+          {
+            "node": "Preparar E-mail de Erro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aguardar e Repetir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar E-mail de Erro": {
+      "main": [
+        [
+          {
+            "node": "Enviar Aviso de Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar e Repetir": {
+      "main": [
+        [
+          {
+            "node": "Consultar Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "3373b647-a576-4fd3-a16b-044b6093ab40",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "912a6a214d9999837db5b72015236f892e5634fd3fe6266316f2143df8a020de"
+  },
+  "nodeGroups": [],
+  "id": "8MvcOTddMHPkZzHX",
+  "tags": []
+}
